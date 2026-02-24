@@ -1,0 +1,30 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="GWM.Controls.LanPortControl">
+    <StackPanel HorizontalAlignment="Center">
+        <Border Width="30" Height="25" Background="#CCCCCC" BorderBrush="#666" BorderThickness="1" CornerRadius="2">
+            <Border Background="#222" Margin="4,4,4,0" CornerRadius="1,1,0,0">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Spacing="1"
+                            Margin="0,2,0,0">
+                    <Rectangle Fill="Gold" Width="1" Height="4" />
+                    <Rectangle Fill="Gold" Width="1" Height="4" />
+                    <Rectangle Fill="Gold" Width="1" Height="4" />
+                    <Rectangle Fill="Gold" Width="1" Height="4" />
+                    <Rectangle Fill="Gold" Width="1" Height="4" />
+                    <Rectangle Fill="Gold" Width="1" Height="4" />
+                    <Rectangle Fill="Gold" Width="1" Height="4" />
+                    <Rectangle Fill="Gold" Width="1" Height="4" />
+                </StackPanel>
+            </Border>
+        </Border>
+        
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="8" Margin="0,2,0,0">
+            <Ellipse Name="LinkLed" Fill="#444" Width="5" Height="5"/>
+            <Ellipse Name="ActiveLed" Fill="#444" Width="5" Height="5"/>
+        </StackPanel>
+        <TextBlock Name="PortLabel" Text="LAN1" FontSize="10" HorizontalAlignment="Center"/>
+    </StackPanel>
+</UserControl>
