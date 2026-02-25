@@ -44,13 +44,12 @@ public partial class MainWindowViewModel : ViewModelBase
 
    private SshClient? _sshClient;
    private bool _isMonitoring;
-
-   public event Action? StatusUpdated;
+  
    
    [RelayCommand]
    private async Task ToggleConnectionAsync()
    {
-       if (_isConnected)
+       if (IsConnected)
        {
            await DisconnectAsync();
        }
@@ -138,18 +137,6 @@ public partial class MainWindowViewModel : ViewModelBase
                     Serial6State = status.Serial6State;
                     Serial7State = status.Serial7State;
                     Serial8State = status.Serial8State;
-
-                    
-                    CpuData.Add(status.CpuUsage);
-                    if (CpuData.Count > 120) CpuData.RemoveAt(0);
-                    
-                    MemoryData.Add(status.MemoryUsage);
-                    if (MemoryData.Count > 120) MemoryData.RemoveAt(0);
-
-                    DiskData.Add(status.DiskUsage);
-                    if (DiskData.Count > 120) DiskData.RemoveAt(0);
-                    
-                    StatsUpdated?.Invoke();
                 });
             }
             catch (Exception ex)
