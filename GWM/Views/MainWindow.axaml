@@ -16,11 +16,5 @@
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 
-   <StackPanel>
-       <controls:LanPortControl State="{Binding PortState}" PortName="{Binding PortName}"/>
-       <Button Content="버튼1" Command="{Binding ChangePortNameCommand}"/>
-       <Button Content="Status" Command="{Binding ChangePortStateCommand}"/>
-      
-   </StackPanel>
 
 </Window>
