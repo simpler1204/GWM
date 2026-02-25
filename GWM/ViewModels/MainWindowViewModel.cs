@@ -7,22 +7,22 @@ namespace GWM.ViewModels;
 public partial class MainWindowViewModel : ViewModelBase
 {
     [ObservableProperty]
-    private string _portName2 = "LAN";
+    private string _portName = "LAN";
 
     [ObservableProperty] 
-    private PortState _portState2 = Models.PortState.Idle;
+    private PortState _portState = Models.PortState.Idle;
     
     [RelayCommand]
     private void ChangePortName()
     {
-        PortName2 = "sids--";
+        PortName = "sids--";
     }
     
 
     [RelayCommand]
     private void ChangePortState()
     {
-        PortState2 = PortState.Connected;
+        PortState = PortState.Connected;
     }
     
 }

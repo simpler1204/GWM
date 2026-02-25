@@ -5,6 +5,7 @@
       <map>
         <entry key="GWM/App.axaml" value="GWM/GWM.csproj" />
         <entry key="GWM/Controls/LanPortControl.axaml" value="GWM/GWM.csproj" />
+        <entry key="GWM/Controls/Moxa8410Control.axaml" value="GWM/GWM.csproj" />
         <entry key="GWM/Controls/SerialPortControl.axaml" value="GWM/GWM.csproj" />
         <entry key="GWM/Views/MainWindow.axaml" value="GWM/GWM.csproj" />
       </map>

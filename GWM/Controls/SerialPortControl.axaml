@@ -4,5 +4,33 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="GWM.Controls.SerialPortControl">
-    
+
+    <StackPanel HorizontalAlignment="Center" Spacing="2">
+        <!-- RJ45 Connector Shape (Same as LanPort) -->
+        <Border Width="30" Height="25" Background="#CCCCCC" BorderBrush="#666" BorderThickness="1" CornerRadius="2">
+            <Border Background="#222" Margin="4,4,4,0" CornerRadius="1,1,0,0">
+                <!-- Pins -->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Spacing="1"
+                            Margin="0,2,0,0">
+                    <Rectangle Width="1" Height="4" Fill="Gold" />
+                    <Rectangle Width="1" Height="4" Fill="Gold" />
+                    <Rectangle Width="1" Height="4" Fill="Gold" />
+                    <Rectangle Width="1" Height="4" Fill="Gold" />
+                    <Rectangle Width="1" Height="4" Fill="Gold" />
+                    <Rectangle Width="1" Height="4" Fill="Gold" />
+                    <Rectangle Width="1" Height="4" Fill="Gold" />
+                    <Rectangle Width="1" Height="4" Fill="Gold" />
+                </StackPanel>
+            </Border>
+        </Border>
+
+        <!-- Tx/Rx LEDs -->
+        <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center" Margin="0,2,0,0">
+            <Ellipse Name="TxLed" Width="8" Height="8" Fill="#444" />
+            <Ellipse Name="RxLed" Width="8" Height="8" Fill="#444" />
+        </StackPanel>
+
+        <TextBlock Name="PortLabel" Text="P1" FontSize="10" HorizontalAlignment="Center" FontWeight="Bold" />
+    </StackPanel>
+
 </UserControl>

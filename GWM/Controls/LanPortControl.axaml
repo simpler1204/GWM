@@ -22,9 +22,9 @@
         </Border>
         
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="8" Margin="0,2,0,0">
-            <Ellipse Name="LinkLed" Fill="#444" Width="5" Height="5"/>
-            <Ellipse Name="ActiveLed" Fill="#444" Width="5" Height="5"/>
+            <Ellipse Name="LinkLed" Fill="#444" Width="8" Height="8"/>
+            <Ellipse Name="ActiveLed" Fill="#444" Width="8" Height="8"/>
         </StackPanel>
-        <TextBlock Name="PortLabel" Text="LAN1" FontSize="10" HorizontalAlignment="Center"/>
+        <TextBlock Name="PortLabel" Text="LAN1" FontSize="10" HorizontalAlignment="Center" Foreground="White" Margin="0,5,0,0"/>
     </StackPanel>
 </UserControl>

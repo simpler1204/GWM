@@ -1,7 +1,5 @@
-﻿using System.Diagnostics;
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using GWM.Models;
 
@@ -20,8 +18,6 @@ public partial class LanPortControl : UserControl
 
     public static readonly StyledProperty<PortState> StateProperty
         = AvaloniaProperty.Register<LanPortControl, PortState>(nameof(PortState), PortState.Idle);
-
-   
     
     public PortState State
     {

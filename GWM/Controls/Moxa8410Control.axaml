@@ -1,0 +1,106 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:controls="clr-namespace:GWM.Controls"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="GWM.Controls.Moxa8410Control">
+    
+    <UserControl.Styles>
+        <!-- 포트 스타일 정의 -->
+        <Style Selector="Border.Port">
+            <Setter Property="BorderBrush" Value="#333333"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Background" Value="#1a1a1a"/>
+            <Setter Property="CornerRadius" Value="2"/>
+        </Style>
+        
+        <!-- LED 스타일 -->
+        <Style Selector="Ellipse.Led">
+            <Setter Property="Width" Value="15"/>
+            <Setter Property="Height" Value="15"/>
+            <Setter Property="Stroke" Value="#333"/>
+            <Setter Property="StrokeThickness" Value="1"/>
+        </Style>
+        
+        <!-- 상태별 LED 색상 -->
+        <Style Selector="Ellipse.Led.Idle">
+            <Setter Property="Fill" Value="#444444"/>
+        </Style>
+        <Style Selector="Ellipse.Led.Connected">
+            <Setter Property="Fill" Value="#00FF00"/>
+            <Setter Property="Effect">
+                <DropShadowEffect Color="#00FF00" BlurRadius="10" Opacity="0.5"/>
+            </Setter>
+        </Style>
+        <Style Selector="Ellipse.Led.Active">
+            <Setter Property="Fill" Value="#FFA500"/>
+            <Setter Property="Effect">
+                <DropShadowEffect Color="#FFA500" BlurRadius="5" Opacity="0.8"/>
+            </Setter>
+        </Style>
+        <Style Selector="Ellipse.Led.Error">
+            <Setter Property="Fill" Value="#FF0000"/>
+            <Setter Property="Effect">
+                <DropShadowEffect Color="#FF0000" BlurRadius="5" Opacity="0.8"/>
+            </Setter>
+        </Style>
+    </UserControl.Styles>
+
+    <Border Background="Black" BorderBrush="#666666" BorderThickness="2" CornerRadius="5" Padding="15">
+        <Grid RowDefinitions="Auto,Auto,Auto">
+
+            <!-- 상단: 로고 및 시스템 LED -->
+            <Grid Grid.Row="0" ColumnDefinitions="Auto,*" Margin="0,0,0,20">
+                <!-- <TextBlock Text="MOXA" FontWeight="Bold" FontSize="24" Foreground="#8B0000" VerticalAlignment="Center"/> -->
+                <TextBlock Text="UC-8410A" FontWeight="SemiBold" FontSize="16" Margin="10,0,0,0"
+                           VerticalAlignment="Bottom" Foreground="White" />
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10">
+                    <StackPanel Spacing="2">
+                        <Ellipse Classes="Led Connected" Name="PowerLed" />
+                        <TextBlock Text="PWR" FontSize="9" HorizontalAlignment="Center" Foreground="White" />
+                    </StackPanel>
+
+                </StackPanel>
+            </Grid>
+
+            <!-- 중단: 시리얼 포트 (8개) -->
+            <Border Grid.Row="1" Background="#E0E0E0" BorderBrush="#999" BorderThickness="1" Padding="10"
+                    Margin="0,0,0,15">
+                <Grid ColumnDefinitions="*,*,*,*,*,*,*,*">
+                    <!-- Serial 1 -->
+                    <controls:SerialPortControl Grid.Column="0" PortNumber="1"
+                                                State="{Binding Serial1State, RelativeSource={RelativeSource AncestorType=controls:Moxa8410Control}}" />
+                    <controls:SerialPortControl Grid.Column="1" PortNumber="2"
+                                                State="{Binding Serial2State, RelativeSource={RelativeSource AncestorType=controls:Moxa8410Control}}" />
+                    <controls:SerialPortControl Grid.Column="2" PortNumber="3"
+                                                State="{Binding Serial3State, RelativeSource={RelativeSource AncestorType=controls:Moxa8410Control}}" />
+                    <controls:SerialPortControl Grid.Column="3" PortNumber="4"
+                                                State="{Binding Serial4State, RelativeSource={RelativeSource AncestorType=controls:Moxa8410Control}}" />
+                    <controls:SerialPortControl Grid.Column="4" PortNumber="5"
+                                                State="{Binding Serial5State, RelativeSource={RelativeSource AncestorType=controls:Moxa8410Control}}" />
+                    <controls:SerialPortControl Grid.Column="5" PortNumber="6"
+                                                State="{Binding Serial6State, RelativeSource={RelativeSource AncestorType=controls:Moxa8410Control}}" />
+                    <controls:SerialPortControl Grid.Column="6" PortNumber="7"
+                                                State="{Binding Serial7State, RelativeSource={RelativeSource AncestorType=controls:Moxa8410Control}}" />
+                    <controls:SerialPortControl Grid.Column="7" PortNumber="8"
+                                                State="{Binding Serial8State, RelativeSource={RelativeSource AncestorType=controls:Moxa8410Control}}" />
+                </Grid>
+            </Border>
+
+            <!-- 하단: LAN 포트 (3개) -->
+            <Grid Grid.Row="2" ColumnDefinitions="Auto,Auto,Auto,*" HorizontalAlignment="Center" ColumnSpacing="100" >
+                <controls:LanPortControl Grid.Column="0" PortName="LAN1"
+                                         State="{Binding Lan1State, RelativeSource={RelativeSource AncestorType=controls:Moxa8410Control}}"
+                                         Margin="0,0,10,0" />
+                <controls:LanPortControl Grid.Column="1" PortName="LAN2"
+                                         State="{Binding Lan2State, RelativeSource={RelativeSource AncestorType=controls:Moxa8410Control}}"
+                                         Margin="0,0,10,0" />
+                <controls:LanPortControl Grid.Column="2" PortName="LAN3"
+                                         State="{Binding Lan3State, RelativeSource={RelativeSource AncestorType=controls:Moxa8410Control}}"
+                                         Margin="0,0,10,0" />
+            </Grid>
+        </Grid>
+    </Border>
+</UserControl>
