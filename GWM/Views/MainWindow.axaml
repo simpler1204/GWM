@@ -16,52 +16,77 @@
         <vm:MainWindowViewModel />
     </Design.DataContext>
 
-    <Grid ColumnDefinitions="400,*,*" Margin="20">
-        <Grid Grid.RowDefinitions="230,*,*">
-            <controls:Moxa8410Control Grid.Row="0" />
-            <Grid Grid.Row="1" ColumnDefinitions="*,*,*">
+    <Grid ColumnDefinitions="500,*,*" Margin="20">
+
+        <Grid Grid.RowDefinitions="50,22,230,*,*">
+            <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,20" Spacing="10">
+                <TextBox Text="{Binding Host}" Watermark="IP Address" Width="150" />
+                <TextBox Text="{Binding Username}" Watermark="Username" Width="100" />
+                <TextBox Text="{Binding Password}" Watermark="Password" PasswordChar="*" Width="100" />
+                <Button Command="{Binding ToggleConnectionCommand}">
+                    <Panel>
+                        <TextBlock Text="Connect" IsVisible="{Binding !IsConnected}" />
+                        <TextBlock Text="Disconnect" IsVisible="{Binding IsConnected}" />
+                    </Panel>
+                </Button>
+            </StackPanel>
+            <TextBlock Grid.Row="1" Text="{Binding StatusMessage}" Foreground="Red" FontSize="15" />
+
+            <controls:Moxa8410Control Grid.Row="2"
+                                      Lan1Name="{Binding Eth0Ip}"
+                                      Lan1State="{Binding Lan1State}"
+                                      Lan2Name="{Binding Eth1Ip}"
+                                      Lan2State="{Binding Lan2State}"
+                                      Lan3Name="{Binding Eth2Ip}"
+                                      Lan3State="{Binding Lan3State}"
+                                      Serial3State="{Binding Serial3State}"
+                                      IsConnected="{Binding IsConnected}" />
+            <Grid Grid.Row="3" ColumnDefinitions="*,*,*">
                 <Border Grid.Column="0" Classes="StatCard">
                     <StackPanel VerticalAlignment="Center">
-                        <TextBlock Text="CPU" FontWeight="Bold" />
-                        <TextBlock Text="{Binding CpuUsageText}" Classes="StatValue"/>
+                        <TextBlock Text="CPU" Classes="Title" />
+                        <TextBlock Text="{Binding CpuUsageText}" Classes="StatValue" />
                     </StackPanel>
                 </Border>
                 <Border Grid.Column="1" Classes="StatCard">
                     <StackPanel VerticalAlignment="Center">
-                        <TextBlock Text="Memory" FontWeight="Bold" />
-                        <TextBlock Text="{Binding MemoryUsageText}" Classes="StatValue"/>
+                        <TextBlock Text="Memory" Classes="Title" />
+                        <TextBlock Text="{Binding MemoryUsageText}" Classes="StatValue" />
                     </StackPanel>
                 </Border>
                 <Border Grid.Column="2" Classes="StatCard">
                     <StackPanel VerticalAlignment="Center">
-                        <TextBlock Text="Disk" FontWeight="Bold" />
-                        <TextBlock Text="{Binding DiskUsageText}" Classes="StatValue"/>
+                        <TextBlock Text="Disk" Classes="Title" />
+                        <TextBlock Text="{Binding DiskUsageText}" Classes="StatValue" />
                     </StackPanel>
                 </Border>
             </Grid>
-
-
+            <Button Grid.Row="4" Content="Refresh Stats" Command="{Binding Port1ClickedCommand}"  Margin="0,30,0,0"/>
         </Grid>
     </Grid>
 
     <Window.Styles>
         <Style Selector="Border.StatCard">
-            <Setter Property="Background" Value="#20808080" />
+            <Setter Property="Background" Value="Black" />
             <Setter Property="CornerRadius" Value="5" />
             <Setter Property="HorizontalAlignment" Value="Center" />
             <Setter Property="VerticalAlignment" Value="Top" />
-            <Setter Property="Width" Value="130" />
+            <Setter Property="Width" Value="160" />
             <Setter Property="Height" Value="70" />
             <Setter Property="Margin" Value="0,5,0,0" />
         </Style>
-        <Style Selector="TextBlock">
+        <Style Selector="TextBlock.Title">
             <Setter Property="HorizontalAlignment" Value="Center" />
             <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Foreground" Value="Wheat" />
         </Style>
         <Style Selector="TextBlock.StatValue">
-            <Setter Property="FontSize" Value="24" />
-            <Setter Property="Foreground" Value="Red" />
+            <Setter Property="FontSize" Value="20" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="Margin" Value="0,10,0,0" />
         </Style>
+
 
     </Window.Styles>
 

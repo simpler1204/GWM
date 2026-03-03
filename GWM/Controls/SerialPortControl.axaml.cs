@@ -17,13 +17,13 @@ public partial class SerialPortControl : UserControl
         set => SetValue(PortNumberProperty, value);
     }
     
-    public static readonly StyledProperty<PortState> StateProperty =
-        AvaloniaProperty.Register<SerialPortControl, PortState>(nameof(State), PortState.Idle);
+    public static readonly StyledProperty<bool> HasErrorProperty =
+        AvaloniaProperty.Register<SerialPortControl, bool>(nameof(HasError), false);
 
-    public PortState State
+    public bool HasError
     {
-        get => GetValue(StateProperty);
-        set => SetValue(StateProperty, value);
+        get => GetValue(HasErrorProperty);
+        set => SetValue(HasErrorProperty, value);
     }
 
     public SerialPortControl()
@@ -38,34 +38,20 @@ public partial class SerialPortControl : UserControl
         {
             PortLabel.Text = $"P{change.GetNewValue<int>()}";
         }
-        else if (change.Property == StateProperty && change.GetNewValue<PortState>() is var newState)
+        else if (change.Property == HasErrorProperty && change.GetNewValue<bool>() is var newState)
         {
-            UpdateLeds(newState);
+           UpdateStatusBorder(newState);
         }
         
     }
 
-    private void UpdateLeds(PortState newState)
+    private void UpdateStatusBorder(bool newState)
     {
-        if(TxLed == null || RxLed == null) return;
-        switch (newState)
-        {
-            case PortState.Idle:
-                TxLed.Fill = SolidColorBrush.Parse("#444");
-                RxLed.Fill = SolidColorBrush.Parse("#444");
-                break;
-            case PortState.Connected:
-                TxLed.Fill = Brushes.Green;
-                RxLed.Fill = Brushes.Green;
-                break;
-            case PortState.Active:
-                TxLed.Fill = Brushes.Orange;
-                RxLed.Fill = Brushes.Orange;
-                break;
-            case PortState.Error:
-                TxLed.Fill = Brushes.Red;
-                RxLed.Fill = Brushes.Red;
-                break;
-        }
+        if (newState)
+            StatusBorder.Background = Brushes.Red;
+        else
+            StatusBorder.Background = SolidColorBrush.Parse("#CCCCCC");
+
+
     }
 }
