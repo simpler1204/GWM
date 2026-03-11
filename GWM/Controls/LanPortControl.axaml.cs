@@ -55,7 +55,7 @@ public partial class LanPortControl : UserControl
                 ActiveLed.Fill = SolidColorBrush.Parse("#444");
                 break;
             case PortState.Connected:
-                LinkLed.Fill = Brushes.Green;
+                LinkLed.Fill = Brushes.LightGreen;
                 ActiveLed.Fill = SolidColorBrush.Parse("#444");
                 break;
             case PortState.Active:

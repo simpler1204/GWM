@@ -4,7 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:controls="clr-namespace:GWM.Controls"
              mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="250"
-             x:Class="GWM.Controls.Moxa8410Control">
+             x:Class="GWM.Controls.Moxa8410Control"
+             >
     
     <UserControl.Styles>
         <!-- 포트 스타일 정의 -->
@@ -50,7 +51,9 @@
                 
                 <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10">
                     <StackPanel Spacing="2">
-                        <Ellipse Classes="Led Connected" Name="PowerLed"/>
+                        <Ellipse Classes="Led"  
+                                 Classes.Connected="{Binding IsConnected, RelativeSource={RelativeSource AncestorType=controls:Moxa8410Control}}"
+                                 Name="PowerLed"/>
                         <TextBlock Text="PWR" FontSize="9" HorizontalAlignment="Center" Foreground="White"/>
                     </StackPanel>
                    
@@ -61,22 +64,22 @@
             <Border Grid.Row="1" Background="#E0E0E0" BorderBrush="#999" BorderThickness="1" Padding="10" Margin="0,0,0,15">
                 <Grid ColumnDefinitions="*,*,*,*,*,*,*,*">
                     <!-- Serial 1 -->
-                    <controls:SerialPortControl Grid.Column="0" PortNumber="1" State="{Binding Serial1State, RelativeSource={RelativeSource AncestorType=controls:Moxa8410Control}}"/>
-                    <controls:SerialPortControl Grid.Column="1" PortNumber="2" State="{Binding Serial2State, RelativeSource={RelativeSource AncestorType=controls:Moxa8410Control}}"/>
-                    <controls:SerialPortControl Grid.Column="2" PortNumber="3" State="{Binding Serial3State, RelativeSource={RelativeSource AncestorType=controls:Moxa8410Control}}"/>
-                    <controls:SerialPortControl Grid.Column="3" PortNumber="4" State="{Binding Serial4State, RelativeSource={RelativeSource AncestorType=controls:Moxa8410Control}}"/>
-                    <controls:SerialPortControl Grid.Column="4" PortNumber="5" State="{Binding Serial5State, RelativeSource={RelativeSource AncestorType=controls:Moxa8410Control}}"/>
-                    <controls:SerialPortControl Grid.Column="5" PortNumber="6" State="{Binding Serial6State, RelativeSource={RelativeSource AncestorType=controls:Moxa8410Control}}"/>
-                    <controls:SerialPortControl Grid.Column="6" PortNumber="7" State="{Binding Serial7State, RelativeSource={RelativeSource AncestorType=controls:Moxa8410Control}}"/>
-                    <controls:SerialPortControl Grid.Column="7" PortNumber="8" State="{Binding Serial8State, RelativeSource={RelativeSource AncestorType=controls:Moxa8410Control}}"/>
+                    <controls:SerialPortControl Grid.Column="0" PortNumber="1" HasError="{Binding Serial1State, RelativeSource={RelativeSource AncestorType=controls:Moxa8410Control}}"/>
+                    <controls:SerialPortControl Grid.Column="1" PortNumber="2" HasError="{Binding Serial2State, RelativeSource={RelativeSource AncestorType=controls:Moxa8410Control}}"/>
+                    <controls:SerialPortControl Grid.Column="2" PortNumber="3" HasError="{Binding Serial3State, RelativeSource={RelativeSource AncestorType=controls:Moxa8410Control}}"/>
+                    <controls:SerialPortControl Grid.Column="3" PortNumber="4" HasError="{Binding Serial4State, RelativeSource={RelativeSource AncestorType=controls:Moxa8410Control}}"/>
+                    <controls:SerialPortControl Grid.Column="4" PortNumber="5" HasError="{Binding Serial5State, RelativeSource={RelativeSource AncestorType=controls:Moxa8410Control}}"/>
+                    <controls:SerialPortControl Grid.Column="5" PortNumber="6" HasError="{Binding Serial5State, RelativeSource={RelativeSource AncestorType=controls:Moxa8410Control}}"/>
+                    <controls:SerialPortControl Grid.Column="6" PortNumber="7" HasError="{Binding Serial7State, RelativeSource={RelativeSource AncestorType=controls:Moxa8410Control}}"/>
+                    <controls:SerialPortControl Grid.Column="7" PortNumber="8" HasError="{Binding Serial8State, RelativeSource={RelativeSource AncestorType=controls:Moxa8410Control}}"/>
                 </Grid>
             </Border>
 
             <!-- 하단: LAN 포트 (3개) -->
-            <Grid Grid.Row="2" ColumnDefinitions="Auto,Auto,Auto,*" HorizontalAlignment="Center"  >
-                <controls:LanPortControl Grid.Column="0" PortName="LAN1" State="{Binding Lan1State, RelativeSource={RelativeSource AncestorType=controls:Moxa8410Control}}" Margin="0,0,10,0"/>
-                <controls:LanPortControl Grid.Column="1" PortName="LAN2" State="{Binding Lan2State, RelativeSource={RelativeSource AncestorType=controls:Moxa8410Control}}" Margin="0,0,10,0"/>
-                <controls:LanPortControl Grid.Column="2" PortName="LAN3" State="{Binding Lan3State, RelativeSource={RelativeSource AncestorType=controls:Moxa8410Control}}" Margin="0,0,10,0"/>
+            <Grid Grid.Row="2" ColumnDefinitions="*,*,*" HorizontalAlignment="Center"  >
+                <controls:LanPortControl Grid.Column="0" PortName="{Binding Lan1Name, RelativeSource={RelativeSource AncestorType=controls:Moxa8410Control}}" State="{Binding Lan1State, RelativeSource={RelativeSource AncestorType=controls:Moxa8410Control}}" Margin="0,0,10,0"/>
+                <controls:LanPortControl Grid.Column="1" PortName="{Binding Lan2Name, RelativeSource={RelativeSource AncestorType=controls:Moxa8410Control}}" State="{Binding Lan2State, RelativeSource={RelativeSource AncestorType=controls:Moxa8410Control}}" Margin="0,0,10,0"/>
+                <controls:LanPortControl Grid.Column="2" PortName="{Binding Lan3Name, RelativeSource={RelativeSource AncestorType=controls:Moxa8410Control}}" State="{Binding Lan3State, RelativeSource={RelativeSource AncestorType=controls:Moxa8410Control}}" Margin="0,0,10,0"/>
             </Grid>
         </Grid>
     </Border>

@@ -7,73 +7,114 @@ namespace GWM.Controls;
 
 public partial class Moxa8410Control : UserControl
 {
+    //Connected
+    public static readonly StyledProperty<bool> IsConnectedProperty =
+        AvaloniaProperty.Register<Moxa8410Control, bool>(nameof(IsConnected), false);   
+    public bool IsConnected
+    {
+        get => GetValue(IsConnectedProperty);
+        set => SetValue(IsConnectedProperty, value);
+    }
+    
+    
+    //Lan Ports
+    public static readonly StyledProperty<string> Lan1NameProperty =
+        AvaloniaProperty.Register<Moxa8410Control, string>(nameof(Lan1Name), "LAN 1");
+    
+    public string Lan1Name
+    {
+        get => GetValue(Lan1NameProperty);
+        set => SetValue(Lan1NameProperty, value);
+    }
+    
+    public static readonly StyledProperty<string> Lan2NameProperty =
+        AvaloniaProperty.Register<Moxa8410Control, string>(nameof(Lan2Name), "LAN 2");
+
+    public string Lan2Name
+    {
+        get=> GetValue(Lan2NameProperty);
+        set => SetValue(Lan2NameProperty, value);
+    }
+    
+    public static readonly StyledProperty<string> Lan3NameProperty =
+        AvaloniaProperty.Register<Moxa8410Control, string>(nameof(Lan3Name), "LAN 3");
+    
+    public string Lan3Name
+    {
+        get => GetValue(Lan3NameProperty);
+        set => SetValue(Lan3NameProperty, value);
+    }
+    
+
+    
     // Serial 1 Ports
-    public static readonly StyledProperty<PortState> Serial1StateProperty =
-        AvaloniaProperty.Register<Moxa8410Control, PortState>(nameof(Serial1State), PortState.Idle);
-    public PortState Serial1State
+    public static readonly StyledProperty<bool> Serial1StateProperty =
+        AvaloniaProperty.Register<Moxa8410Control, bool>(nameof(Serial1State), false);
+    
+    public bool Serial1State
     {
         get => GetValue(Serial1StateProperty);
         set => SetValue(Serial1StateProperty, value);
     }
     
     // Serial 2 Ports
-    public static readonly StyledProperty<PortState> Serial2StateProperty =
-        AvaloniaProperty.Register<Moxa8410Control, PortState>(nameof(Serial2State), PortState.Idle);
-    public PortState Serial2State
+    public static readonly StyledProperty<bool> Serial2StateProperty =
+        AvaloniaProperty.Register<Moxa8410Control, bool>(nameof(Serial2State), false);
+    public bool Serial2State
     {
         get => GetValue(Serial2StateProperty);
         set => SetValue(Serial2StateProperty, value);
     }
     
     //Serial 3 Ports
-    public static readonly StyledProperty<PortState> Serial3StateProperty =
-        AvaloniaProperty.Register<Moxa8410Control, PortState>(nameof(Serial3State), PortState.Idle);
-    public PortState Serial3State
+    public static readonly StyledProperty<bool> Serial3StateProperty =
+        AvaloniaProperty.Register<Moxa8410Control, bool>(nameof(Serial3State), false);
+    public bool Serial3State
     {
         get => GetValue(Serial3StateProperty);
         set => SetValue(Serial3StateProperty, value);
     }
     
     // Serial 4 Ports
-    public static readonly StyledProperty<PortState> Serial4StateProperty =
-        AvaloniaProperty.Register<Moxa8410Control, PortState>(nameof(Serial4State), PortState.Idle);
-    public PortState Serial4State
+    public static readonly StyledProperty<bool> Serial4StateProperty =
+        AvaloniaProperty.Register<Moxa8410Control, bool>(nameof(Serial4State), false);
+    public bool Serial4State
     {
         get => GetValue(Serial4StateProperty);
         set => SetValue(Serial4StateProperty, value);
     }
     
     // Serial 5 Ports
-    public static readonly StyledProperty<PortState> Serial5StateProperty =
-        AvaloniaProperty.Register<Moxa8410Control, PortState>(nameof(Serial5State), PortState.Idle);
-    public PortState Serial5State
+    public static readonly StyledProperty<bool> Serial5StateProperty =
+        AvaloniaProperty.Register<Moxa8410Control, bool>(nameof(Serial5State), false);
+    public bool Serial5State
     {
         get => GetValue(Serial5StateProperty);
         set => SetValue(Serial5StateProperty, value);
     }
     
     // Serial 6 Ports
-    public static readonly StyledProperty<PortState> Serial6StateProperty =
-        AvaloniaProperty.Register<Moxa8410Control, PortState>(nameof(Serial6State), PortState.Idle);
-    public PortState Serial6State
+    public static readonly StyledProperty<bool> Serial6StateProperty =
+        AvaloniaProperty.Register<Moxa8410Control, bool>(nameof(Serial6State), false);
+    public bool Serial6State
     {
         get => GetValue(Serial6StateProperty);
         set => SetValue(Serial6StateProperty, value);
     }
     
     // Serial 7 Ports
-    public static readonly StyledProperty<PortState> Serial7StateProperty =
-        AvaloniaProperty.Register<Moxa8410Control, PortState>(nameof(Serial7State), PortState.Idle);    
-    public PortState Serial7State
+    public static readonly StyledProperty<bool> Serial7StateProperty =
+        AvaloniaProperty.Register<Moxa8410Control, bool>(nameof(Serial7State), false);    
+    public bool Serial7State
     {
         get => GetValue(Serial7StateProperty);
         set => SetValue(Serial7StateProperty, value);
     }
     
     // Serial 8 Ports
-    public static readonly StyledProperty<PortState> Serial8StateProperty =
-        AvaloniaProperty.Register<Moxa8410Control, PortState>(nameof(Serial8State), PortState.Idle);
-    public PortState Serial8State
+    public static readonly StyledProperty<bool> Serial8StateProperty =
+        AvaloniaProperty.Register<Moxa8410Control, bool>(nameof(Serial8State), false);
+    public bool Serial8State
     {
         get => GetValue(Serial8StateProperty);
         set => SetValue(Serial8StateProperty, value);
