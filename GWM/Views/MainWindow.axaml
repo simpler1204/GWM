@@ -16,11 +16,11 @@
         <vm:MainWindowViewModel />
     </Design.DataContext>
 
-    <Grid ColumnDefinitions="500,*,*" Margin="20">
+    <Grid ColumnDefinitions="500,*,*,*" Margin="20">
 
         <Grid Grid.RowDefinitions="50,22,230,*,*">
             <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,20" Spacing="10">
-                <TextBox Text="{Binding Host}" Watermark="IP Address" Width="150" />
+                <TextBox Text="{Binding Host, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Watermark="IP Address" Width="150" />
                 <TextBox Text="{Binding Username}" Watermark="Username" Width="100" />
                 <TextBox Text="{Binding Password}" Watermark="Password" PasswordChar="*" Width="100" />
                 <Button Command="{Binding ToggleConnectionCommand}">
@@ -63,6 +63,10 @@
             </Grid>
             <Button Grid.Row="4" Content="Refresh Stats" Command="{Binding Port1ClickedCommand}"  Margin="0,30,0,0"/>
         </Grid>
+        <Grid Grid.Column="1">
+                <TextBlock Text="Additional Info 1" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Black"/>
+        </Grid>
+
     </Grid>
 
     <Window.Styles>

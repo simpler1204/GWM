@@ -11,7 +11,7 @@
         <!-- 포트 스타일 정의 -->
         <Style Selector="Border.Port">
             <Setter Property="BorderBrush" Value="#333333"/>
-            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderThickness" Value="10"/>
             <Setter Property="Background" Value="#1a1a1a"/>
             <Setter Property="CornerRadius" Value="2"/>
         </Style>
@@ -33,7 +33,6 @@
         </Style>
         <Style Selector="Ellipse.Led.Active">
             <Setter Property="Fill" Value="#FFA500"/>
-           
         </Style>
         <Style Selector="Ellipse.Led.Error">
             <Setter Property="Fill" Value="#FF0000"/>
@@ -47,10 +46,10 @@
             <!-- 상단: 로고 및 시스템 LED -->
             <Grid Grid.Row="0" ColumnDefinitions="Auto,*" Margin="0,0,0,20">
                 <!-- <TextBlock Text="MOXA" FontWeight="Bold" FontSize="24" Foreground="#8B0000" VerticalAlignment="Center"/> -->
-                <TextBlock Text="UC-8410A" FontWeight="SemiBold" FontSize="16" Margin="10,0,0,0" VerticalAlignment="Bottom" Foreground="White"/>
+                <TextBlock Grid.Column="0" Text="UC-8410A" FontWeight="SemiBold" FontSize="16" Margin="10,0,0,0" VerticalAlignment="Bottom" Foreground="White"/>
                 
                 <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10">
-                    <StackPanel Spacing="2">
+                    <StackPanel Spacing="2" Orientation="Vertical">
                         <Ellipse Classes="Led"  
                                  Classes.Connected="{Binding IsConnected, RelativeSource={RelativeSource AncestorType=controls:Moxa8410Control}}"
                                  Name="PowerLed"/>

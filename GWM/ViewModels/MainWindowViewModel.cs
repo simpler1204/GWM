@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
@@ -9,6 +10,7 @@ using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using GWM.Models;
+using GWM.Utilities;
 using Renci.SshNet;
 
 
@@ -16,25 +18,16 @@ namespace GWM.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase
 {
-    private const string DeviceSocketIp = "192.168.4.127";
-    private const int DeviceSocketPort = 3131;
+    private const int SocketServerPort = 3131;
 
-    [ObservableProperty] private string _host = "192.168.4.127";
-
-    [ObservableProperty] private string _username = "moxa";
-
-    [ObservableProperty] private string _password = "moxa";
-
+    [ObservableProperty] private string _host = "192.168.5.127";
+    [ObservableProperty] private string _username = "root";
+    [ObservableProperty] private string _password = "sids";
     [ObservableProperty] private bool _isConnected;
-
     [ObservableProperty] private string _statusMessage = "Ready";
-
     [ObservableProperty] private string _cpuUsageText = "0%";
-
     [ObservableProperty] private string _memoryUsageText = "0%";
-
     [ObservableProperty] private string _diskUsageText = "0%";
-
     [ObservableProperty] private string _eth0Ip = "N/A";
     [ObservableProperty] private string _eth1Ip = "N/A";
     [ObservableProperty] private string _eth2Ip = "N/A";
@@ -58,11 +51,11 @@ public partial class MainWindowViewModel : ViewModelBase
     private bool _isMonitoring;
 
     [RelayCommand]
-    public void Port1Clicked()
+    public async Task Port1Clicked()
     {
-       Serial3State = true;
+        await GetSerialErrorList();
     }
-    
+
 
     [RelayCommand]
     public async Task ToggleConnectionAsync()
@@ -92,10 +85,13 @@ public partial class MainWindowViewModel : ViewModelBase
 
             if (_sshClient != null && _sshClient.IsConnected)
             {
-                IsConnected = true;
-                StatusMessage = "Connected";
-                _isMonitoring = true;
-                _ = MonitorDevice();
+                 IsConnected = true;
+                 StatusMessage = "Connected";
+                 _isMonitoring = true;
+                 
+                 _ = MonitorDevice();
+                // _ = GetErrorContent();
+                 
             }
         }
         catch (Exception ex)
@@ -129,7 +125,7 @@ public partial class MainWindowViewModel : ViewModelBase
         Lan1State = PortState.Idle;
         Lan2State = PortState.Idle;
         Lan3State = PortState.Idle;
-        
+
         Serial1State = false;
 
         CpuUsageText = "0%";
@@ -149,7 +145,7 @@ public partial class MainWindowViewModel : ViewModelBase
                 await Dispatcher.UIThread.InvokeAsync(() =>
                 {
                     CpuUsageText = $"{status.CpuUsage:F1}%";
-                    Debug.WriteLine($"{status.CpuUsage:F1}%");
+                   // Debug.WriteLine($"{status.CpuUsage:F1}%");
                     MemoryUsageText = $"{status.MemoryUsage:F1}%";
                     DiskUsageText = $"{status.DiskUsage:F1}%";
 
@@ -157,9 +153,13 @@ public partial class MainWindowViewModel : ViewModelBase
                     Eth0Ip = status.Eth0;
                     Eth1Ip = status.Eth1;
                     Eth2Ip = status.Eth2;
-                    Lan1State = status.Lan1State;
-                    Lan2State = status.Lan2State;
-                    Lan3State = status.Lan3State;
+                    
+                    if(Lan1State != status.Lan1State)
+                        Lan1State = status.Lan1State;
+                    if(Lan2State != status.Lan2State)
+                        Lan2State = status.Lan2State;
+                    if(Lan3State != status.Lan3State)
+                        Lan3State = status.Lan3State;
 
 
                     // Serial states (mocked or from status)
@@ -176,7 +176,7 @@ public partial class MainWindowViewModel : ViewModelBase
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("failed to read status: " + ex.Message);
+               // Debug.WriteLine("failed to read status: " + ex.Message);
                 await Dispatcher.UIThread.InvokeAsync(() =>
                 {
                     StatusMessage = $"Error reading status: {ex.Message}";
@@ -184,7 +184,22 @@ public partial class MainWindowViewModel : ViewModelBase
                 });
                 await DisconnectAsync();
             }
-
+            await Task.Delay(1000);
+        }
+    }
+    
+    private async Task GetErrorContent()
+    {
+        while (_isMonitoring && _sshClient != null && _sshClient.IsConnected)
+        {
+            try
+            {
+                await GetCannotConnectDevice();
+            }
+            catch (Exception ex)
+            {
+               
+            }
             await Task.Delay(1000);
         }
     }
@@ -258,7 +273,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
         // Simulate some serial activity for demo purposes (randomly active if connected)
         // In real scenario, you would parse /proc/tty/driver/serial to check tx/rx counts
-        
+
 
         return new DeviceStatus
         {
@@ -277,22 +292,234 @@ public partial class MainWindowViewModel : ViewModelBase
             Lan1State = isEth0Live ? PortState.Connected : PortState.Idle,
             Lan2State = isEth1Live ? PortState.Connected : PortState.Idle,
             Lan3State = isEth2Live ? PortState.Connected : PortState.Idle,
-
         };
     }
 
     [RelayCommand]
-    public async Task TestSocketConnection()
+    private async Task<List<string>?> GetCannotConnectDevice()
     {
         try
         {
-            var response = await SendSocketMessageAsync("test");
-            await Dispatcher.UIThread.InvokeAsync(() => { StatusMessage = $"Socket 응답: {response}"; });
+            //const string message = "tcpAddress";
+            const string message = "cannotConnectDevice";
+            //const string message = "serialErrorList";
+
+            using var client = new TcpClient();
+
+            // 비동기로 연결 시도
+            try
+            {
+                await Task.Run(() => client.Connect(Host, SocketServerPort));
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("Client not connected");
+            }
+
+            // 연결 상태 확인
+            if (!client.Connected)
+            {
+                throw new InvalidOperationException("Client not connected");
+            }
+
+            using var stream = client.GetStream();
+
+            // 메시지 전송
+            var sendBuffer = System.Text.Encoding.UTF8.GetBytes(message + "\n");
+
+            try
+            {
+                await stream.WriteAsync(sendBuffer.AsMemory(0, sendBuffer.Length));
+                await stream.FlushAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new SocketException((int)SocketError.ConnectionReset);
+            }
+
+            var response = ReadJsonArrayResponse(stream, message);
+            var cannotConnectList = ResponseParser.ParseCannotConnectDeviceList(response);
+            
+            if (cannotConnectList is not null)
+            {
+                await Dispatcher.UIThread.InvokeAsync(() =>
+                {
+                    if(Lan1State == PortState.Connected)
+                        Lan1State = PortState.Error;
+                    if(Lan2State == PortState.Connected)
+                        Lan2State = PortState.Error;
+                    if(Lan3State == PortState.Connected)
+                        Lan3State = PortState.Error;
+                });
+                
+                return cannotConnectList;
+            }
+            else
+            {
+                await Dispatcher.UIThread.InvokeAsync(() =>
+                {
+                    if(Lan1State == PortState.Error)
+                        Lan1State = PortState.Connected;
+                    if(Lan2State == PortState.Error)
+                        Lan2State = PortState.Connected;
+                    if(Lan3State == PortState.Error)
+                        Lan3State = PortState.Connected;
+                });
+            }
         }
         catch (Exception ex)
         {
-            await Dispatcher.UIThread.InvokeAsync(() => { StatusMessage = $"Socket 오류: {ex.Message}"; });
+           // await Dispatcher.UIThread.InvokeAsync(() => { StatusMessage = $"❌ 오류: {ex.Message}"; });
         }
+
+        return null;
+    }
+    
+     private async Task<List<string>?> GetSerialErrorList()
+    {
+        try
+        {
+            //const string message = "tcpAddress";
+            //const string message = "cannotConnectDevice";
+            const string message = "serialErrorList";
+
+            using var client = new TcpClient();
+
+            // 비동기로 연결 시도
+            try
+            {
+                await Task.Run(() => client.Connect(Host, SocketServerPort));
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("Client not connected");
+            }
+
+            // 연결 상태 확인
+            if (!client.Connected)
+            {
+                throw new InvalidOperationException("Client not connected");
+            }
+
+            using var stream = client.GetStream();
+
+            // 메시지 전송
+            var sendBuffer = System.Text.Encoding.UTF8.GetBytes(message + "\n");
+
+            try
+            {
+                await stream.WriteAsync(sendBuffer.AsMemory(0, sendBuffer.Length));
+                await stream.FlushAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new SocketException((int)SocketError.ConnectionReset);
+            }
+            var response = ReadJsonArrayResponse(stream, message);
+            var serialErrorList = ResponseParser.ParseSerialDeviceAddressInfoList(response);
+
+            if (serialErrorList != null)
+                foreach (var v in serialErrorList)
+                {
+                    Debug.WriteLine(v.ToString());
+                }
+        }
+        catch (Exception ex)
+        {
+           // await Dispatcher.UIThread.InvokeAsync(() => { StatusMessage = $"❌ 오류: {ex.Message}"; });
+        }
+
+        return null;
+    }
+
+    private static string ReadJsonArrayResponse(NetworkStream stream, string requestToken)
+    {
+        stream.ReadTimeout = 5000; // 5초로 증가
+
+        var receiveBuffer = new byte[4096];
+        var aggregate = new System.Text.StringBuilder();
+
+
+        for (var attempt = 1; attempt <= 10; attempt++)
+        {
+            try
+            {
+                int bytesRead = stream.Read(receiveBuffer, 0, receiveBuffer.Length);
+
+
+                if (bytesRead == 0)
+                {
+                    break;
+                }
+
+                var chunk = System.Text.Encoding.UTF8.GetString(receiveBuffer, 0, bytesRead);
+                var trimmedChunk = chunk.Trim();
+
+
+                // Some servers echo the request token before sending the actual JSON payload.
+                if (string.Equals(trimmedChunk, requestToken, StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
+                aggregate.Append(chunk);
+
+                if (TryExtractJsonArray(aggregate.ToString(), out var json))
+                {
+                    return json;
+                }
+            }
+            catch (TimeoutException tex)
+            {
+                if (attempt >= 10)
+                {
+                    throw;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+
+        throw new InvalidDataException("JSON array payload was not received from server.");
+    }
+
+    private static bool TryExtractJsonArray(string text, out string json)
+    {
+        var trimmed = text.Trim();
+        if (LooksLikeJsonArray(trimmed))
+        {
+            json = trimmed;
+            return true;
+        }
+
+        var start = text.IndexOf('[');
+        var end = text.LastIndexOf(']');
+        if (start >= 0 && end > start)
+        {
+            var candidate = text.Substring(start, end - start + 1).Trim();
+            if (LooksLikeJsonArray(candidate))
+            {
+                json = candidate;
+                return true;
+            }
+        }
+
+        json = string.Empty;
+        return false;
+    }
+
+    private static bool LooksLikeJsonArray(string? text)
+    {
+        if (string.IsNullOrWhiteSpace(text))
+        {
+            return false;
+        }
+
+        var trimmed = text.Trim();
+        return trimmed.StartsWith("[") && trimmed.EndsWith("]");
     }
 
     // 텍스트 기반 TCP 요청/응답(UTF-8) 유틸리티
@@ -308,7 +535,8 @@ public partial class MainWindowViewModel : ViewModelBase
 
         try
         {
-            await client.ConnectAsync(DeviceSocketIp, DeviceSocketPort, timeoutCts.Token);
+            
+            await client.ConnectAsync(Host, SocketServerPort, timeoutCts.Token);
             await using var stream = client.GetStream();
 
             var payload = appendNewLine ? $"{message}\n" : message;
@@ -342,11 +570,11 @@ public partial class MainWindowViewModel : ViewModelBase
         catch (OperationCanceledException)
         {
             throw new TimeoutException(
-                $"Socket request timed out after {timeoutMs}ms ({DeviceSocketIp}:{DeviceSocketPort}).");
+                $"Socket request timed out after {timeoutMs}ms ({Host}:{SocketServerPort}).");
         }
         catch (SocketException ex)
         {
-            throw new InvalidOperationException($"Socket communication failed ({DeviceSocketIp}:{DeviceSocketPort}).",
+            throw new InvalidOperationException($"Socket communication failed ({Host}:{SocketServerPort}).",
                 ex);
         }
     }

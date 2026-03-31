@@ -42,7 +42,6 @@ public partial class SerialPortControl : UserControl
         {
            UpdateStatusBorder(newState);
         }
-        
     }
 
     private void UpdateStatusBorder(bool newState)
