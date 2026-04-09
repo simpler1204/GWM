@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
@@ -11,8 +9,9 @@ namespace GWM.Controls;
 
 public partial class LanPortControl : UserControl
 {
-    private CancellationTokenSource? _errorBlinkCts;
-    private bool _isErrorBlinkOn;
+    private static readonly IBrush NormalBrush = SolidColorBrush.Parse("#CCCCCC");
+    private readonly DispatcherTimer _errorBlinkTimer;
+    private bool _isBlinkOn;
 
     public static readonly StyledProperty<string> PortNameProperty
         = AvaloniaProperty.Register<LanPortControl, string>(nameof(PortName), "LAN");
@@ -32,16 +31,31 @@ public partial class LanPortControl : UserControl
         set => SetValue(StateProperty, value);
     }
 
+    public static readonly StyledProperty<bool> HasErrorProperty
+        = AvaloniaProperty.Register<LanPortControl, bool>(nameof(HasError), false);
+
+    public bool HasError
+    {
+        get => GetValue(HasErrorProperty);
+        set => SetValue(HasErrorProperty, value);
+    }
+
     public LanPortControl()
     {
         InitializeComponent();
+
+        _errorBlinkTimer = new DispatcherTimer
+        {
+            Interval = TimeSpan.FromMilliseconds(500)
+        };
+        _errorBlinkTimer.Tick += (_, _) =>
+        {
+            _isBlinkOn = !_isBlinkOn;
+            StatusBorder.Background = _isBlinkOn ? Brushes.Red : NormalBrush;
+        };
     }
 
-    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
-    {
-        StopErrorBlink();
-        base.OnDetachedFromVisualTree(e);
-    }
+  
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
@@ -55,83 +69,61 @@ public partial class LanPortControl : UserControl
         {
             UpdateLeds(newState);
         }
+        
+        else if (change.Property == HasErrorProperty && change.GetNewValue<bool>() is var newHasError)
+        {
+            UpdateStatusBorder(newHasError);
+        }
+    }
+
+    private void UpdateStatusBorder(bool newHasError)
+    {
+        if (newHasError)
+        {
+            if (!_errorBlinkTimer.IsEnabled)
+            {
+                _isBlinkOn = false;
+                _errorBlinkTimer.Start();
+            }
+            return;
+        }
+
+        _errorBlinkTimer.Stop();
+        _isBlinkOn = false;
+        StatusBorder.Background = NormalBrush;
+    }
+
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        _errorBlinkTimer.Stop();
+        base.OnDetachedFromVisualTree(e);
     }
 
     private void UpdateLeds(PortState newState)
     {
         if (LinkLed == null || ActiveLed == null) return;
-
-        if (newState != PortState.Error)
-        {
-            StopErrorBlink();
-            _isErrorBlinkOn = false;
-        }
+       
        
         switch (newState)
         {
             case PortState.Idle:
                 LinkLed.Fill = SolidColorBrush.Parse("#444");
-               // ActiveLed.Fill = SolidColorBrush.Parse("#444");
+                ActiveLed.Fill = SolidColorBrush.Parse("#444");
                 break;
             case PortState.Connected:
                 LinkLed.Fill = Brushes.LightGreen;
-                //ActiveLed.Fill = SolidColorBrush.Parse("#444");
+                ActiveLed.Fill = SolidColorBrush.Parse("#444");
                 break;
             case PortState.Active:
                 LinkLed.Fill = Brushes.Green;
-               // ActiveLed.Fill = Brushes.Orange;
+                ActiveLed.Fill = Brushes.Orange;
                 break;
             case PortState.Error:
-              //  LinkLed.Fill = Brushes.LightGreen;
+                LinkLed.Fill = Brushes.LightGreen;
                 ActiveLed.Fill = Brushes.Red;
-                _isErrorBlinkOn = true;
-                StartErrorBlink();
                 break;
         }
     }
 
-    private void StartErrorBlink()
-    {
-        StopErrorBlink();
-        _errorBlinkCts = new CancellationTokenSource();
-        _ = BlinkErrorAsync(_errorBlinkCts.Token);
-    }
-
-    private void StopErrorBlink()
-    {
-        if (_errorBlinkCts is null)
-        {
-            return;
-        }
-
-        _errorBlinkCts.Cancel();
-        _errorBlinkCts.Dispose();
-        _errorBlinkCts = null;
-    }
-
-    private async Task BlinkErrorAsync(CancellationToken cancellationToken)
-    {
-        while (!cancellationToken.IsCancellationRequested)
-        {
-            try
-            {
-                // UI 스레드를 블로킹하지 않도록 ConfigureAwait(false)
-                await Task.Delay(500, cancellationToken).ConfigureAwait(false);
-            }
-            catch (TaskCanceledException)
-            {
-                break;
-            }
-
-            if (cancellationToken.IsCancellationRequested) break;
-
-            // UI 업데이트는 반드시 UI 스레드에서 실행
-            await Dispatcher.UIThread.InvokeAsync(() =>
-            {
-                if (ActiveLed == null || cancellationToken.IsCancellationRequested) return;
-                _isErrorBlinkOn = !_isErrorBlinkOn;
-                ActiveLed.Fill = _isErrorBlinkOn ? Brushes.Red : SolidColorBrush.Parse("#444");
-            });
-        }
-    }
+   
 }

@@ -76,9 +76,9 @@
 
             <!-- 하단: LAN 포트 (3개) -->
             <Grid Grid.Row="2" ColumnDefinitions="*,*,*" HorizontalAlignment="Center"  >
-                <controls:LanPortControl Grid.Column="0" PortName="{Binding Lan1Name, RelativeSource={RelativeSource AncestorType=controls:Moxa8410Control}}" State="{Binding Lan1State, RelativeSource={RelativeSource AncestorType=controls:Moxa8410Control}}" Margin="0,0,10,0"/>
-                <controls:LanPortControl Grid.Column="1" PortName="{Binding Lan2Name, RelativeSource={RelativeSource AncestorType=controls:Moxa8410Control}}" State="{Binding Lan2State, RelativeSource={RelativeSource AncestorType=controls:Moxa8410Control}}" Margin="0,0,10,0"/>
-                <controls:LanPortControl Grid.Column="2" PortName="{Binding Lan3Name, RelativeSource={RelativeSource AncestorType=controls:Moxa8410Control}}" State="{Binding Lan3State, RelativeSource={RelativeSource AncestorType=controls:Moxa8410Control}}" Margin="0,0,10,0"/>
+                <controls:LanPortControl Grid.Column="0" PortName="{Binding Lan1Name, RelativeSource={RelativeSource AncestorType=controls:Moxa8410Control}}" State="{Binding Lan1State, RelativeSource={RelativeSource AncestorType=controls:Moxa8410Control}}" HasError="{Binding Lan1HasError, RelativeSource={RelativeSource AncestorType=controls:Moxa8410Control}}" Margin="0,0,10,0"/>
+                <controls:LanPortControl Grid.Column="1" PortName="{Binding Lan2Name, RelativeSource={RelativeSource AncestorType=controls:Moxa8410Control}}" State="{Binding Lan2State, RelativeSource={RelativeSource AncestorType=controls:Moxa8410Control}}" HasError="{Binding Lan2HasError, RelativeSource={RelativeSource AncestorType=controls:Moxa8410Control}}" Margin="0,0,10,0"/>
+                <controls:LanPortControl Grid.Column="2" PortName="{Binding Lan3Name, RelativeSource={RelativeSource AncestorType=controls:Moxa8410Control}}" State="{Binding Lan3State, RelativeSource={RelativeSource AncestorType=controls:Moxa8410Control}}" HasError="{Binding Lan3HasError, RelativeSource={RelativeSource AncestorType=controls:Moxa8410Control}}" Margin="0,0,10,0"/>
             </Grid>
         </Grid>
     </Border>

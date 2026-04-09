@@ -1,13 +1,19 @@
-﻿using Avalonia;
+﻿using System;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
+using Avalonia.Threading;
 using GWM.Models;
 
 namespace GWM.Controls;
 
 public partial class SerialPortControl : UserControl
 {
+    private static readonly IBrush NormalBrush = SolidColorBrush.Parse("#CCCCCC");
+    private readonly DispatcherTimer _blinkTimer;
+    private bool _isBlinkOn;
+
     public static readonly StyledProperty<int> PortNumberProperty =
         AvaloniaProperty.Register<SerialPortControl, int>(nameof(PortNumber), 1);
 
@@ -29,6 +35,16 @@ public partial class SerialPortControl : UserControl
     public SerialPortControl()
     {
         InitializeComponent();
+
+        _blinkTimer = new DispatcherTimer
+        {
+            Interval = TimeSpan.FromMilliseconds(500)
+        };
+        _blinkTimer.Tick += (_, _) =>
+        {
+            _isBlinkOn = !_isBlinkOn;
+            StatusBorder.Background = _isBlinkOn ? Brushes.Red : NormalBrush;
+        };
     }
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
@@ -47,10 +63,26 @@ public partial class SerialPortControl : UserControl
     private void UpdateStatusBorder(bool newState)
     {
         if (newState)
-            StatusBorder.Background = Brushes.Red;
+        {
+            if (!_blinkTimer.IsEnabled)
+            {
+                _isBlinkOn = false;
+                _blinkTimer.Start();
+            }
+        }
         else
-            StatusBorder.Background = SolidColorBrush.Parse("#CCCCCC");
+        {
+            _blinkTimer.Stop();
+            _isBlinkOn = false;
+            StatusBorder.Background = NormalBrush;
+        }
 
+    }
+
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        _blinkTimer.Stop();
+        base.OnDetachedFromVisualTree(e);
 
     }
 }

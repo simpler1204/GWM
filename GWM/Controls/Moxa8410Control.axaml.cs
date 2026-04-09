@@ -44,6 +44,33 @@ public partial class Moxa8410Control : UserControl
         get => GetValue(Lan3NameProperty);
         set => SetValue(Lan3NameProperty, value);
     }
+
+    private static readonly StyledProperty<bool> Lan1ErrorProperty =
+        AvaloniaProperty.Register<Moxa8410Control, bool>(nameof(Lan1Error), false);
+
+    public bool Lan1Error
+    {
+        get => GetValue(Lan1ErrorProperty);
+        set => SetValue(Lan1ErrorProperty, value);
+    }
+    
+    private static readonly StyledProperty<bool> Lan2ErrorProperty =
+        AvaloniaProperty.Register<Moxa8410Control, bool>(nameof(Lan2Error), false);
+
+    public bool Lan2Error
+    {
+        get => GetValue(Lan2ErrorProperty);
+        set => SetValue(Lan2ErrorProperty, value);
+    }
+    
+    private static readonly StyledProperty<bool> Lan3ErrorProperty =
+        AvaloniaProperty.Register<Moxa8410Control, bool>(nameof(Lan3Error), false);
+
+    public bool Lan3Error
+    {
+        get => GetValue(Lan3ErrorProperty);
+        set => SetValue(Lan3ErrorProperty, value);
+    }
     
 
     
@@ -130,6 +157,16 @@ public partial class Moxa8410Control : UserControl
         set => SetValue(Lan1StateProperty, value);
     }
     
+    public static readonly StyledProperty<bool> Lan1HasErrorProperty =
+        AvaloniaProperty.Register<Moxa8410Control, bool>(nameof(Lan1HasError), false);
+    
+    public bool Lan1HasError
+    {
+        get => GetValue(Lan1ErrorProperty);
+        set => SetValue(Lan1ErrorProperty, value);
+    }
+    
+    
     // LAN 2 Ports
     public static readonly StyledProperty<PortState> Lan2StateProperty =
         AvaloniaProperty.Register<Moxa8410Control, PortState>(nameof(Lan2State), PortState.Idle);
@@ -139,6 +176,16 @@ public partial class Moxa8410Control : UserControl
         set => SetValue(Lan2StateProperty, value);
     }
     
+    public static readonly StyledProperty<bool> Lan2HasErrorProperty =
+        AvaloniaProperty.Register<Moxa8410Control, bool>(nameof(Lan2HasError), false);
+    
+    public bool Lan2HasError
+    {
+        get => GetValue(Lan2ErrorProperty);
+        set => SetValue(Lan2ErrorProperty, value);
+    }
+    
+    
     // LAN 3 Ports
     public static readonly StyledProperty<PortState> Lan3StateProperty =
         AvaloniaProperty.Register<Moxa8410Control, PortState>(nameof(Lan3State), PortState.Idle);
@@ -146,6 +193,15 @@ public partial class Moxa8410Control : UserControl
     {
         get => GetValue(Lan3StateProperty);
         set => SetValue(Lan3StateProperty, value);
+    }
+    
+    public static readonly StyledProperty<bool> Lan3HasErrorProperty =
+        AvaloniaProperty.Register<Moxa8410Control, bool>(nameof(Lan3HasError), false);
+    
+    public bool Lan3HasError
+    {
+        get => GetValue(Lan3ErrorProperty);
+        set => SetValue(Lan3ErrorProperty, value);
     }
     
     public Moxa8410Control()

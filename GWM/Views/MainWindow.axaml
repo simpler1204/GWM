@@ -38,8 +38,19 @@
                                       Lan2Name="{Binding Eth1Ip}"
                                       Lan2State="{Binding Lan2State}"
                                       Lan3Name="{Binding Eth2Ip}"
-                                      Lan3State="{Binding Lan3State}"
+                                      Lan1HasError="{Binding Lan1HasError}"
+                                      Lan2HasError="{Binding Lan2HasError}"
+                                      Lan3HasError="{Binding Lan3HasError}"
+                                      Serial1State="{Binding Serial1State}"
+                                      Serial2State="{Binding Serial2State}" 
                                       Serial3State="{Binding Serial3State}"
+                                      Serial4State="{Binding Serial4State}"
+                                      Serial5State="{Binding Serial5State}"
+                                      Serial6State="{Binding Serial6State}"
+                                      Serial7State="{Binding Serial7State}"
+                                      Serial8State="{Binding Serial8State}"
+                                      
+                             
                                       IsConnected="{Binding IsConnected}" />
             <Grid Grid.Row="3" ColumnDefinitions="*,*,*">
                 <Border Grid.Column="0" Classes="StatCard">
