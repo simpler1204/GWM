@@ -34,7 +34,6 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty] private string _eth1Ip = "N/A";
     [ObservableProperty] private string _eth2Ip = "N/A";
 
-
     // Port States for UI Binding
     [ObservableProperty] private PortState _lan1State;
     [ObservableProperty] private PortState _lan2State;
@@ -43,7 +42,6 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty] private bool _lan1HasError;
     [ObservableProperty] private bool _lan2HasError;
     [ObservableProperty] private bool _lan3HasError;
-    
 
     [ObservableProperty] private bool _serial1State;
     [ObservableProperty] private bool _serial2State;
@@ -86,7 +84,6 @@ public partial class MainWindowViewModel : ViewModelBase
             }
         }
     }
-
 
     private SshClient? _sshClient;
     private bool _isMonitoring;
